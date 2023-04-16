@@ -1,0 +1,296 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > student</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: student (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">student</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.3%
+  </span>
+  <span class="absValue">
+    (113/115)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;
+&nbsp;import java.sql.*;
+&nbsp;
+<b class="fc">&nbsp;public class student extends user {</b>
+<b class="fc">&nbsp;    Connection conn = null;</b>
+&nbsp;
+&nbsp;    void makeConnection() throws ClassNotFoundException, SQLException {
+<b class="fc">&nbsp;        String TestURL = &quot;jdbc:postgresql://localhost:5432/final&quot;;</b>
+<b class="fc">&nbsp;        String TestUserName = &quot;postgres&quot;;</b>
+<b class="fc">&nbsp;        String TestPassword = &quot;1234&quot;;</b>
+<b class="fc">&nbsp;        Class.forName(&quot;org.postgresql.Driver&quot;);</b>
+<b class="fc">&nbsp;        conn = DriverManager.getConnection(TestURL, TestUserName, TestPassword);</b>
+&nbsp;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public boolean check_prereq(String courseName, String mail) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String query = &quot;SELECT prerequisites from courses where course_code =? &quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, courseName);</b>
+<b class="fc">&nbsp;        ResultSet rs = stmt.executeQuery();</b>
+<b class="fc">&nbsp;        String Prereq = &quot;&quot;;</b>
+<b class="fc">&nbsp;        while (rs.next()) {</b>
+<b class="fc">&nbsp;            Prereq = rs.getString(1);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (Prereq.equals(&quot;&quot;)) {</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        else if(Prereq.equals(&quot;xxx&quot;)){</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        String[] array = Prereq.split(&quot;,&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (String s : array) {</b>
+<b class="fc">&nbsp;            String query1 = &quot;SELECT grades from enrollments,course_offerings where enrollments.student_mail =? and  course_offerings.course_code=? and enrollments.course_offering_id=course_offerings.course_offering_id&quot;;</b>
+<b class="fc">&nbsp;            PreparedStatement stmt3 = conn.prepareStatement(query1);</b>
+<b class="fc">&nbsp;            stmt3.setString(1, mail);</b>
+<b class="fc">&nbsp;            stmt3.setString(2, s);</b>
+<b class="fc">&nbsp;            ResultSet rs3 = stmt3.executeQuery();</b>
+<b class="fc">&nbsp;            int check = 0;</b>
+<b class="fc">&nbsp;            while (rs3.next()) {</b>
+<b class="fc">&nbsp;                check = 1;</b>
+<b class="fc">&nbsp;                if (rs3.getInt(1) &lt; 4) {</b>
+<b class="fc">&nbsp;                    return false;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            if (check == 0) {</b>
+&nbsp;//            conn.close();
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;//        conn.close();
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public boolean check_creditLimit(String courseName, String mail, String currentSem) throws SQLException, ClassNotFoundException {
+&nbsp;
+<b class="fc">&nbsp;        double total_prev_credit = 0;</b>
+<b class="fc">&nbsp;        double credits_this_sem = 0;</b>
+<b class="fc">&nbsp;        double course_credit = 0;</b>
+&nbsp;        String Prev1;
+&nbsp;        String Prev2;
+<b class="fc">&nbsp;        String Curryear = currentSem.substring(0, 4);</b>
+<b class="fc">&nbsp;        int Curryear_num = Integer.parseInt(Curryear);</b>
+<b class="fc">&nbsp;        if (currentSem.charAt(5) == &#39;1&#39;) {</b>
+<b class="fc">&nbsp;            Prev1 = Curryear_num - 1 + &quot;-1&quot;;</b>
+&nbsp;
+&nbsp;        } else {
+<b class="fc">&nbsp;            Prev1 = Curryear_num + &quot;-1&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        Prev2 = Curryear_num - 1 + &quot;-2&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        makeConnection();</b>
+&nbsp;
+<b class="fc">&nbsp;        String query = &quot;Select courses.credits from enrollments,courses,course_offerings where student_mail=? and enrollments.course_offering_id=course_offerings.course_offering_id and courses.course_code=course_offerings.course_code and course_offerings.semester_name=? and enrollments.grades&gt;3&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, mail);</b>
+<b class="fc">&nbsp;        stmt.setString(2, Prev1);</b>
+&nbsp;
+<b class="fc">&nbsp;        ResultSet rs = stmt.executeQuery();</b>
+<b class="fc">&nbsp;        while (rs.next()) {</b>
+<b class="fc">&nbsp;            total_prev_credit += rs.getDouble(1);</b>
+&nbsp;
+&nbsp;        }
+&nbsp;        //
+<b class="fc">&nbsp;        PreparedStatement stmt1 = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt1.setString(1, mail);</b>
+<b class="fc">&nbsp;        stmt1.setString(2, Prev2);</b>
+<b class="fc">&nbsp;        ResultSet rs1 = stmt1.executeQuery();</b>
+<b class="fc">&nbsp;        while (rs1.next()) {</b>
+<b class="fc">&nbsp;            total_prev_credit += rs1.getDouble(1);</b>
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        PreparedStatement stmt2 = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt2.setString(1, mail);</b>
+<b class="fc">&nbsp;        stmt2.setString(2, currentSem);</b>
+<b class="fc">&nbsp;        ResultSet rs2 = stmt2.executeQuery();</b>
+<b class="fc">&nbsp;        while (rs2.next()) {</b>
+<b class="nc">&nbsp;            credits_this_sem += rs2.getDouble(1);</b>
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        String query1 = &quot;Select courses.credits from courses where course_code=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt3 = conn.prepareStatement(query1);</b>
+<b class="fc">&nbsp;        stmt3.setString(1, courseName);</b>
+<b class="fc">&nbsp;        ResultSet rs3 = stmt3.executeQuery();</b>
+<b class="fc">&nbsp;        while (rs3.next()) {</b>
+<b class="fc">&nbsp;            course_credit += rs3.getDouble(1);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (total_prev_credit == 0) {</b>
+&nbsp;//            conn.close();
+<b class="fc">&nbsp;            return course_credit + credits_this_sem &lt;= 18;</b>
+&nbsp;        }
+&nbsp;//        conn.close();
+<b class="fc">&nbsp;        return (course_credit + credits_this_sem) &lt;= (1.25 * (total_prev_credit/2));</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public String register_course(String currentSemester, String mail, String courseName) throws SQLException, ClassNotFoundException {
+&nbsp;
+<b class="fc">&nbsp;        makeConnection();</b>
+&nbsp;
+<b class="fc">&nbsp;        String q1 = &quot;SELECT course_offering_id,cgpa_constraint from course_offerings  where course_offerings.course_code=? and course_offerings.semester_name=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt2 = conn.prepareStatement(q1);</b>
+<b class="fc">&nbsp;        stmt2.setString(1, courseName);</b>
+<b class="fc">&nbsp;        stmt2.setString(2, currentSemester);</b>
+<b class="fc">&nbsp;        ResultSet rs = stmt2.executeQuery();</b>
+<b class="fc">&nbsp;        double minCGPA=-1;</b>
+<b class="fc">&nbsp;        while(rs.next()){</b>
+<b class="fc">&nbsp;             minCGPA = rs.getDouble(2);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (minCGPA==-1) {</b>
+&nbsp;//            conn.close();
+<b class="fc">&nbsp;            return &quot;notoffered&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (!check_prereq(courseName, mail)) {</b>
+&nbsp;//            conn.close();
+<b class="fc">&nbsp;            return &quot;prereqnotful&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (!check_creditLimit(courseName, mail, currentSemester)) {</b>
+&nbsp;//            conn.close();
+<b class="nc">&nbsp;            return &quot;creditlimit&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        double currCGPA = compute_CGPA(mail);</b>
+<b class="fc">&nbsp;        if (minCGPA &gt; currCGPA) {</b>
+&nbsp;//            conn.close();
+<b class="fc">&nbsp;            return &quot;minCGPA&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        String query = &quot;INSERT INTO  enrollments (student_mail,course_offering_id) VALUES (?,(SELECT course_offering_id from course_offerings  where course_offerings.course_code=? and course_offerings.semester_name=?))&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, mail);</b>
+<b class="fc">&nbsp;        stmt.setString(2, courseName);</b>
+<b class="fc">&nbsp;        stmt.setString(3, currentSemester);</b>
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;        conn.close();</b>
+<b class="fc">&nbsp;        return &quot;done&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String deregister_course(String currentSemester, String mail, String courseNameD) throws SQLException, ClassNotFoundException {
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        makeConnection();</b>
+&nbsp;
+<b class="fc">&nbsp;        String q1 = &quot;SELECT enrollments.course_offering_id from enrollments,course_offerings  where enrollments.student_mail=? and course_offerings.course_code=? and course_offerings.semester_name=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt2 = conn.prepareStatement(q1);</b>
+<b class="fc">&nbsp;        stmt2.setString(1, mail);</b>
+<b class="fc">&nbsp;        stmt2.setString(2, courseNameD);</b>
+<b class="fc">&nbsp;        stmt2.setString(3, currentSemester);</b>
+<b class="fc">&nbsp;        ResultSet rs = stmt2.executeQuery();</b>
+&nbsp;        int id;
+<b class="fc">&nbsp;        if(rs.next()) {</b>
+<b class="fc">&nbsp;            id = rs.getInt(1);</b>
+<b class="fc">&nbsp;            String q2 = &quot;DELETE from enrollments  where student_mail=? and course_offering_id=?&quot;;</b>
+<b class="fc">&nbsp;            PreparedStatement stmt3 = conn.prepareStatement(q2);</b>
+<b class="fc">&nbsp;            stmt3.setString(1, mail);</b>
+<b class="fc">&nbsp;            stmt3.setInt(2, id);</b>
+<b class="fc">&nbsp;            stmt3.executeUpdate();</b>
+&nbsp;//            conn.close();
+<b class="fc">&nbsp;            return &quot;done&quot;;</b>
+&nbsp;        }
+&nbsp;//        conn.close();
+<b class="fc">&nbsp;        return &quot;notexist&quot;;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-10 10:18</div>
+</div>
+</body>
+</html>

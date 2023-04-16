@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="userTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-03-10T04:42:04" hostname="JATIN" time="7.811">
+  <properties/>
+  <testcase name="compute_CGPA()" classname="userTest" time="2.942"/>
+  <testcase name="check_catalogue()" classname="userTest" time="0.985"/>
+  <testcase name="view_grades()" classname="userTest" time="0.91"/>
+  <testcase name="changePassword()" classname="userTest" time="0.393"/>
+  <testcase name="changeContactInfo()" classname="userTest" time="0.212"/>
+  <testcase name="graduation_check()" classname="userTest" time="2.35"/>
+  <system-out><![CDATA[All Grades in All enrollments
+Course Code	Semester	Grade
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

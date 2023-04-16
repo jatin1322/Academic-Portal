@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > faculty</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: faculty (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">faculty</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.4%
+  </span>
+  <span class="absValue">
+    (82/96)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.io.*;
+&nbsp;import java.sql.*;
+&nbsp;
+&nbsp;import com.opencsv.CSVReader;
+&nbsp;import com.opencsv.CSVWriter;
+&nbsp;
+<b class="fc">&nbsp;public class faculty extends user {</b>
+<b class="fc">&nbsp;    Connection conn = null;</b>
+&nbsp;
+&nbsp;     void makeConnection() throws ClassNotFoundException, SQLException {
+<b class="fc">&nbsp;        String TestURL = &quot;jdbc:postgresql://localhost:5432/final&quot;;</b>
+<b class="fc">&nbsp;        String TestUserName = &quot;postgres&quot;;</b>
+<b class="fc">&nbsp;        String TestPassword = &quot;1234&quot;;</b>
+<b class="fc">&nbsp;        Class.forName(&quot;org.postgresql.Driver&quot;);</b>
+<b class="fc">&nbsp;        conn = DriverManager.getConnection(TestURL, TestUserName, TestPassword);</b>
+&nbsp;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+&nbsp;    public String offer_course(String mail, String currentSemester, String coursecode, double minCgpa) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String query = &quot;INSERT INTO  course_offerings (course_code,faculty_mail,semester_name,cgpa_constraint) VALUES (?,?,?,?)&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, coursecode);</b>
+<b class="fc">&nbsp;        stmt.setString(2, mail);</b>
+<b class="fc">&nbsp;        stmt.setString(3, currentSemester);</b>
+<b class="fc">&nbsp;        stmt.setDouble(4, minCgpa);</b>
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+<b class="fc">&nbsp;        conn.close();</b>
+<b class="fc">&nbsp;        return &quot;done&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String remove_enrollments(String mail, String currentSemester, String courseCode_remove) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String q = &quot;Select course_offering_id from course_offerings where faculty_mail=? and course_code=? and semester_name=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt2 = conn.prepareStatement(q);</b>
+<b class="fc">&nbsp;        stmt2.setString(1, mail);</b>
+<b class="fc">&nbsp;        stmt2.setString(2, courseCode_remove);</b>
+<b class="fc">&nbsp;        stmt2.setString(3, currentSemester);</b>
+<b class="fc">&nbsp;        ResultSet rs = stmt2.executeQuery();</b>
+<b class="fc">&nbsp;        int a = 0;</b>
+<b class="fc">&nbsp;        while (rs.next()) {</b>
+<b class="fc">&nbsp;            a = rs.getInt(1);</b>
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        if (a == 0) {</b>
+<b class="fc">&nbsp;            conn.close();</b>
+<b class="fc">&nbsp;            return &quot;coursenotexist&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        String query = &quot;DELETE  from enrollments where course_offering_id= ?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setInt(1, a);</b>
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+<b class="fc">&nbsp;        conn.close();</b>
+<b class="fc">&nbsp;        return &quot;done&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String remove_course(String mail, String currentSemester, String courseCode_remove) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+&nbsp;
+<b class="fc">&nbsp;        String query = &quot;DELETE  from course_offerings where course_code= ? and faculty_mail =? and semester_name = ?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, courseCode_remove);</b>
+<b class="fc">&nbsp;        stmt.setString(2, mail);</b>
+<b class="fc">&nbsp;        stmt.setString(3, currentSemester);</b>
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+<b class="fc">&nbsp;        conn.close();</b>
+<b class="fc">&nbsp;        return &quot;done&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public  boolean download_classList(String mail, String courseName, String semesterName) throws SQLException, ClassNotFoundException, IOException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String query = &quot;SELECT enrollments.student_mail,course_offerings.course_code,course_offerings.semester_name,enrollments.grades FROM course_offerings,enrollments where enrollments.course_offering_id=course_offerings.course_offering_id and course_code=? and course_offerings.semester_name=? and faculty_mail=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, courseName);</b>
+<b class="fc">&nbsp;        stmt.setString(2, semesterName);</b>
+<b class="fc">&nbsp;        stmt.setString(3, mail);</b>
+<b class="fc">&nbsp;        ResultSet rs = stmt.executeQuery();</b>
+&nbsp;
+<b class="fc">&nbsp;        File file = new File(&quot;D:\\software project\\AIMS\\src\\main\\java\\output.csv&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        FileWriter outputfile = new FileWriter(file);</b>
+<b class="fc">&nbsp;        CSVWriter writer = new CSVWriter(outputfile);</b>
+<b class="fc">&nbsp;        String[] headers = {&quot;student_mail&quot;, &quot;course_code&quot;, &quot;Semester_name&quot;, &quot;grades&quot;};</b>
+<b class="fc">&nbsp;        writer.writeNext(headers);</b>
+&nbsp;
+&nbsp;        // Write the data to the CSV file
+<b class="fc">&nbsp;        while (rs.next()) {</b>
+<b class="nc">&nbsp;            String[] data = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)};</b>
+<b class="nc">&nbsp;            writer.writeNext(data);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        conn.close();</b>
+<b class="fc">&nbsp;        writer.close();</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean grade_entry(String mail) throws SQLException, ClassNotFoundException, IOException {
+&nbsp;
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        File file = new File(&quot;D:\\software project\\AIMS\\src\\main\\java\\output.csv&quot;);</b>
+<b class="fc">&nbsp;        String UPDATE_GRADES_QUERY = &quot;UPDATE Enrollments &quot; + &quot;SET grades = ? WHERE student_mail = ? &quot; + &quot;AND course_offering_id = (SELECT course_offering_id &quot; + &quot;FROM Course_Offerings &quot; + &quot;WHERE course_code = ? AND semester_name = ? AND faculty_mail = ?)&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(UPDATE_GRADES_QUERY);</b>
+<b class="fc">&nbsp;        CSVReader reader = new CSVReader(new FileReader(file));</b>
+&nbsp;        String[] line;
+<b class="fc">&nbsp;        reader.readNext();</b>
+<b class="fc">&nbsp;        while ((line = reader.readNext()) != null) {</b>
+<b class="nc">&nbsp;            String studentMail = line[0];</b>
+<b class="nc">&nbsp;            String courseCode = line[1];</b>
+<b class="nc">&nbsp;            String SemesterName = line[2];</b>
+<b class="nc">&nbsp;            int grades = Integer.parseInt(line[3]);</b>
+<b class="nc">&nbsp;            stmt.setInt(1, grades);</b>
+<b class="nc">&nbsp;            stmt.setString(2, studentMail);</b>
+<b class="nc">&nbsp;            stmt.setString(3, courseCode);</b>
+<b class="nc">&nbsp;            stmt.setString(4, SemesterName);</b>
+<b class="nc">&nbsp;            stmt.setString(5, mail);</b>
+<b class="nc">&nbsp;            stmt.executeUpdate();</b>
+&nbsp;
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        conn.close();</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean grade_entry_single(String student_mail, String Faculty_mail, String course_code, String semname, int grade) throws SQLException, ClassNotFoundException {
+&nbsp;
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String UPDATE_GRADES_QUERY = &quot;UPDATE Enrollments &quot; + &quot;SET grades = ? WHERE student_mail = ? &quot; + &quot;AND course_offering_id = (SELECT course_offering_id &quot; + &quot;FROM Course_Offerings &quot; + &quot;WHERE course_code = ? AND semester_name = ? AND faculty_mail = ?)&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(UPDATE_GRADES_QUERY);</b>
+<b class="fc">&nbsp;        stmt.setInt(1, grade);</b>
+<b class="fc">&nbsp;        stmt.setString(2, student_mail);</b>
+<b class="fc">&nbsp;        stmt.setString(3, course_code);</b>
+<b class="fc">&nbsp;        stmt.setString(4, semname);</b>
+<b class="fc">&nbsp;        stmt.setString(5, Faculty_mail);</b>
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+<b class="fc">&nbsp;        conn.close();</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-10 10:18</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,249 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Main</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Main (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Main</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/90)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.io.IOException;
+&nbsp;import java.sql.SQLException;
+&nbsp;
+<b class="nc">&nbsp;public class Main {</b>
+&nbsp;    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
+<b class="nc">&nbsp;        startPage Login = new startPage();</b>
+<b class="nc">&nbsp;        String email = Login.getMail();</b>
+<b class="nc">&nbsp;        String password = Login.getPassword();</b>
+<b class="nc">&nbsp;        String role = Login.login(email, password);</b>
+<b class="nc">&nbsp;        while (role.equals(&quot;invalid&quot;)) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Wrong ID or password&quot;);</b>
+<b class="nc">&nbsp;            email = Login.getMail();</b>
+<b class="nc">&nbsp;            password = Login.getPassword();</b>
+<b class="nc">&nbsp;            role = Login.login(email, password);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        System.out.println(&quot;Login Successful&quot;);</b>
+&nbsp;
+&nbsp;        // States  :: setup-&gt;enrolling-&gt;grade_submission-&gt;setup
+&nbsp;
+<b class="nc">&nbsp;        String currentSemester = Login.getCurrSemOrCurrState(1);</b>
+<b class="nc">&nbsp;        String currentState = Login.getCurrSemOrCurrState(2);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Current Semester is &quot; + currentSemester);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Current State is &quot; + currentState);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (role.equals(&quot;student&quot;)) {</b>
+<b class="nc">&nbsp;            student_UI ui = new student_UI();</b>
+<b class="nc">&nbsp;            int option = ui.student_ui();</b>
+<b class="nc">&nbsp;            while (option != 8) {</b>
+<b class="nc">&nbsp;                if (option &gt; 8 || option &lt; 1) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Invalid Input &quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;  &quot;);</b>
+&nbsp;                } else {
+&nbsp;
+<b class="nc">&nbsp;                    if (option == 1) {</b>
+<b class="nc">&nbsp;                        if (currentState.equals(&quot;EN&quot;)) {</b>
+<b class="nc">&nbsp;                            ui.register_course(currentSemester, email);</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            System.out.println(&quot;You can&#39;t Enroll as enrolling Window ended &quot;);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    } else if (option == 2) {</b>
+<b class="nc">&nbsp;                        if (currentState.equals(&quot;EN&quot;)) {</b>
+<b class="nc">&nbsp;                                  ui.deregister_course(currentSemester,email);</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            System.out.println(&quot;You can&#39;t Deregister as Deadline to Drop ended &quot;);</b>
+&nbsp;                        }
+&nbsp;
+<b class="nc">&nbsp;                    } else if (option == 3) {</b>
+<b class="nc">&nbsp;                        ui.view_grades(email);</b>
+<b class="nc">&nbsp;                    } else if (option == 4) {</b>
+<b class="nc">&nbsp;                        ui.CheckGraduation(email);</b>
+&nbsp;
+<b class="nc">&nbsp;                    } else if (option == 5) {</b>
+<b class="nc">&nbsp;                        ui.compute_CGPA(email);</b>
+&nbsp;
+<b class="nc">&nbsp;                    } else if (option == 6) {</b>
+<b class="nc">&nbsp;                        ui.changeContactInfo(email);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        ui.changePassword(email);</b>
+&nbsp;                    }
+&nbsp;
+&nbsp;
+&nbsp;                }
+<b class="nc">&nbsp;                option = ui.student_ui();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println(&quot;Logout From Student Page&quot;);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        } else if (role.equals(&quot;faculty&quot;)) {</b>
+<b class="nc">&nbsp;            faculty_UI ui = new faculty_UI();</b>
+<b class="nc">&nbsp;            int option = ui.faculty_ui();</b>
+<b class="nc">&nbsp;            while (option != 8) {</b>
+<b class="nc">&nbsp;                if (option &gt; 8 || option &lt; 1) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Invalid Input &quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;  &quot;);</b>
+&nbsp;                } else {
+&nbsp;
+<b class="nc">&nbsp;                    if (option == 1) {</b>
+<b class="nc">&nbsp;                        if (currentState.equals(&quot;EN&quot;)) {</b>
+<b class="nc">&nbsp;                         ui.offer_course(email,currentSemester);</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            System.out.println(&quot;You cannot add course as per calendar&quot;);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    } else if (option == 2) {</b>
+<b class="nc">&nbsp;                        if (currentState.equals(&quot;EN&quot;)) {</b>
+<b class="nc">&nbsp;                            ui.remove_course(email,currentSemester);</b>
+&nbsp;                        }
+&nbsp;                           else {
+<b class="nc">&nbsp;                            System.out.println(&quot;You cannot Remove course as per calendar&quot;);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    } else if (option == 3) {</b>
+<b class="nc">&nbsp;                        ui.view_grades();</b>
+<b class="nc">&nbsp;                    } else if (option == 4) {</b>
+<b class="nc">&nbsp;                        if (currentState.equals(&quot;GS&quot;)) ui.grade_entry(email);</b>
+&nbsp;                        else {
+<b class="nc">&nbsp;                            System.out.println(&quot;You cannot perform Grade entry as per calendar&quot;);</b>
+&nbsp;                        }
+&nbsp;
+<b class="nc">&nbsp;                    } else if (option == 5) {</b>
+<b class="nc">&nbsp;                        ui.download_classList(email);</b>
+<b class="nc">&nbsp;                    } else if (option == 6) ui.changeContactInfo(email);</b>
+&nbsp;                    else {
+<b class="nc">&nbsp;                        ui.changePassword(email);</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;                option = ui.faculty_ui();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println(&quot;Logout From Faculty Page&quot;);</b>
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            admin_UI ui = new admin_UI();</b>
+<b class="nc">&nbsp;            int option = ui.admin_ui();</b>
+<b class="nc">&nbsp;            while (option != 10) {</b>
+<b class="nc">&nbsp;                if (option &gt; 10 || option &lt; 1) {</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;Invalid Input &quot;);</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;  &quot;);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (option == 1) {</b>
+<b class="nc">&nbsp;                        ui.add_course();</b>
+&nbsp;
+<b class="nc">&nbsp;                    } else if (option == 2) {</b>
+<b class="nc">&nbsp;                        ui.remove_course();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;                    } else if (option == 3) {</b>
+<b class="nc">&nbsp;                        ui.add_users();</b>
+&nbsp;
+<b class="nc">&nbsp;                    }  else if (option == 4) {</b>
+&nbsp;
+<b class="nc">&nbsp;                        ui.change_currSem(currentSemester);</b>
+<b class="nc">&nbsp;                    } else if (option == 5) ui.view_grades();</b>
+<b class="nc">&nbsp;                    else if (option == 6) {</b>
+<b class="nc">&nbsp;                        ui.Transcript();</b>
+<b class="nc">&nbsp;                    } else if (option == 7) ui.Graduation_check();</b>
+<b class="nc">&nbsp;                    else if (option == 8) ui.changeContactInfo(email);</b>
+&nbsp;
+&nbsp;                    else {
+<b class="nc">&nbsp;                        ui.changePassword(email);</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;                option = ui.admin_ui();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println(&quot;Logout From Admin Page&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-10 10:18</div>
+</div>
+</body>
+</html>

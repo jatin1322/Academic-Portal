@@ -1,0 +1,4 @@
+Student Mail 	Entry Number	CGPA 	
+2020csb1090@iitrpr.ac.in	2020csb1090@	NaN
+Course Code	Semester	Grade
+CS102	2023-2	10

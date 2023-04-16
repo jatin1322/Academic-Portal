@@ -1,0 +1,230 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > admin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: admin (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">admin</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.4%
+  </span>
+  <span class="absValue">
+    (71/76)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.io.FileWriter;
+&nbsp;import java.io.IOException;
+&nbsp;import java.sql.*;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class admin extends user {</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    Connection conn = null;</b>
+&nbsp;    void makeConnection() throws ClassNotFoundException, SQLException {
+<b class="fc">&nbsp;        String TestURL = &quot;jdbc:postgresql://localhost:5432/final&quot;;</b>
+<b class="fc">&nbsp;        String TestUserName = &quot;postgres&quot;;</b>
+<b class="fc">&nbsp;        String TestPassword = &quot;1234&quot;;</b>
+<b class="fc">&nbsp;        Class.forName(&quot;org.postgresql.Driver&quot;);</b>
+<b class="fc">&nbsp;        conn = DriverManager.getConnection(TestURL, TestUserName, TestPassword);</b>
+&nbsp;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public boolean add_course(String courseCode, String courseDescription, String creditStructure, String preRequisite, double credits) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String query = &quot;INSERT INTO  courses (course_code,course_description,credit_structure,prerequisites,credits) VALUES (?,?,?,?,?)&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, courseCode);</b>
+<b class="fc">&nbsp;        stmt.setString(2, courseDescription);</b>
+<b class="fc">&nbsp;        stmt.setString(3, creditStructure);</b>
+<b class="fc">&nbsp;        stmt.setString(4, preRequisite);</b>
+<b class="fc">&nbsp;        stmt.setDouble(5, credits);</b>
+&nbsp;
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public boolean remove_course(String courseCode) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String query = &quot;DELETE from courses where course_code=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, courseCode);</b>
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean check_user(String mail) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String query = &quot;Select email from users where email=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, mail);</b>
+<b class="fc">&nbsp;        ResultSet rs = stmt.executeQuery();</b>
+&nbsp;
+<b class="fc">&nbsp;        return !rs.next();</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean add_users(String mail, String UPassword, String name, int role, String contact) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        String query = &quot;INSERT INTO  users (email,password,name,user_type,contact_info) VALUES (?,?,?,?,?)&quot;;</b>
+<b class="fc">&nbsp;        String s = &quot;&quot;;</b>
+<b class="fc">&nbsp;        if (role == 1) {</b>
+<b class="fc">&nbsp;            s = &quot;student&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (role == 2) {</b>
+<b class="fc">&nbsp;            s = &quot;faculty&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (role == 3) {</b>
+<b class="fc">&nbsp;            s = &quot;admin&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        PreparedStatement stmt = conn.prepareStatement(query);</b>
+<b class="fc">&nbsp;        stmt.setString(1, mail);</b>
+<b class="fc">&nbsp;        stmt.setString(2, UPassword);</b>
+<b class="fc">&nbsp;        stmt.setString(3, name);</b>
+<b class="fc">&nbsp;        stmt.setString(4, s);</b>
+<b class="fc">&nbsp;        stmt.setString(5, contact);</b>
+<b class="fc">&nbsp;        stmt.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean change_currState(String Cursem, String newe) throws SQLException, ClassNotFoundException {
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        PreparedStatement stmt2 = conn.prepareStatement(&quot;UPDATE currsem SET curr_state = ? where semester_name=?&quot;);</b>
+<b class="fc">&nbsp;        stmt2.setString(1, newe);</b>
+<b class="fc">&nbsp;        stmt2.setString(2, Cursem);</b>
+<b class="fc">&nbsp;        stmt2.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean change_currSem(String Cursem, String newe) throws SQLException, ClassNotFoundException {
+&nbsp;
+<b class="fc">&nbsp;        makeConnection();</b>
+<b class="fc">&nbsp;        PreparedStatement stmt2 = conn.prepareStatement(&quot;UPDATE currsem SET semester_name = ? where semester_name= ? &quot;);</b>
+<b class="fc">&nbsp;        stmt2.setString(1, newe);</b>
+<b class="fc">&nbsp;        stmt2.setString(2, Cursem);</b>
+&nbsp;
+<b class="fc">&nbsp;        stmt2.executeUpdate();</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean Transcript(String Mail) throws SQLException, ClassNotFoundException, IOException {
+&nbsp;
+<b class="fc">&nbsp;        double CGPA = compute_CGPA(Mail);</b>
+<b class="fc">&nbsp;        makeConnection();</b>
+&nbsp;        FileWriter writer;
+<b class="fc">&nbsp;        writer = new FileWriter(&quot;D:\\software project\\AIMS\\src\\main\\java\\transcript.txt&quot;);</b>
+<b class="fc">&nbsp;        writer.write(&quot;Student Mail \tEntry Number\tCGPA \t\n&quot;);</b>
+<b class="fc">&nbsp;        writer.write(Mail + &quot;\t&quot; + Mail.substring(0, 11) + &quot;\t&quot; + CGPA + &quot;\n&quot;);</b>
+<b class="fc">&nbsp;        writer.write(&quot;Course Code\tSemester\tGrade\n&quot;);</b>
+<b class="fc">&nbsp;        String query2 = &quot;SELECT course_code,semester_name,grades from course_offerings,enrollments where student_mail=? and enrollments.course_offering_id=course_offerings.course_offering_id &quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement stmt2 = conn.prepareStatement(query2);</b>
+<b class="fc">&nbsp;        stmt2.setString(1, Mail);</b>
+<b class="fc">&nbsp;        ResultSet rs2 = stmt2.executeQuery();</b>
+<b class="fc">&nbsp;        while (rs2.next()) {</b>
+<b class="nc">&nbsp;            String courseCode = rs2.getString(&quot;course_code&quot;);</b>
+<b class="nc">&nbsp;            String semesterName = rs2.getString(&quot;semester_name&quot;);</b>
+<b class="nc">&nbsp;            int grade = rs2.getInt(&quot;grades&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            writer.write(courseCode + &quot;\t&quot; + semesterName + &quot;\t&quot; + grade + &quot;\n&quot;);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-10 10:18</div>
+</div>
+</body>
+</html>

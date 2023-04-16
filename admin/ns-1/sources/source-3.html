@@ -1,0 +1,245 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > admin_UI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: admin_UI (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">admin_UI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/92)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.io.IOException;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.util.Scanner;
+&nbsp;
+<b class="nc">&nbsp;public class admin_UI {</b>
+<b class="nc">&nbsp;    Scanner scanner = new Scanner(System.in);</b>
+<b class="nc">&nbsp;    admin Admin=new admin();</b>
+&nbsp;    public int admin_ui(){
+<b class="nc">&nbsp;        System.out.println(&quot;To perform Specific task press number&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;1)Create a course&quot;); // done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;2)Remove Course&quot;); // done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;3)Add User&quot;); // done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;4)Change Current Semester Or current State&quot;);// done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;5)View Grades&quot;); // done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;6)Generate Transcript&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;7)Check Graduation&quot;);  //done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;8)Change Contact Number&quot;); // done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;9)Change Password&quot;); // done</b>
+<b class="nc">&nbsp;        System.out.println(&quot;10)Logout&quot;); // done</b>
+<b class="nc">&nbsp;        return Integer.parseInt(scanner.nextLine());</b>
+&nbsp;    }
+&nbsp;    public void add_course() throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.println(&quot;Enter course code&quot;);</b>
+<b class="nc">&nbsp;        String courseCode = scanner.nextLine();</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter course Description(optional)&quot;);</b>
+<b class="nc">&nbsp;        String courseDescription = scanner.nextLine();</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter course Credit structure(L-T-P)&quot;);</b>
+<b class="nc">&nbsp;        String creditStructure = scanner.nextLine();</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter number of prerequisites&quot;);</b>
+<b class="nc">&nbsp;        int coursePrereqNumber = Integer.parseInt(scanner.nextLine());</b>
+<b class="nc">&nbsp;        String preRequisite = &quot;xxx&quot;;</b>
+<b class="nc">&nbsp;        if (coursePrereqNumber != 0) {</b>
+<b class="nc">&nbsp;            preRequisite = &quot;&quot;;</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; coursePrereqNumber; i++) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Enter Name of &quot; + (i + 1) + &quot; prerequisites&quot;);</b>
+<b class="nc">&nbsp;                String temp = scanner.nextLine();</b>
+<b class="nc">&nbsp;                preRequisite += temp;</b>
+<b class="nc">&nbsp;                if (i != coursePrereqNumber - 1)</b>
+<b class="nc">&nbsp;                    preRequisite += &quot;,&quot;;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        System.out.println(&quot;Enter number of Credits&quot;);</b>
+<b class="nc">&nbsp;        float credits = Float.parseFloat(scanner.nextLine());</b>
+<b class="nc">&nbsp;        boolean output=Admin.add_course(courseCode,courseDescription,creditStructure,preRequisite,credits);</b>
+<b class="nc">&nbsp;        if(output) System.out.println(&quot;Course Added Successfully&quot;);</b>
+<b class="nc">&nbsp;        else System.out.println(&quot;Course Not Added&quot;);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void remove_course() throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.println(&quot;Enter course code&quot;);</b>
+<b class="nc">&nbsp;        String courseCode = scanner.nextLine();</b>
+<b class="nc">&nbsp;        String output1=Admin.check_catalogue(courseCode);</b>
+<b class="nc">&nbsp;        if (output1.equals(&quot;notincatalog&quot;)) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Course code you entered in not in course catalog&quot;);</b>
+&nbsp;            return ;
+&nbsp;        }
+<b class="nc">&nbsp;        boolean output=Admin.remove_course(courseCode);</b>
+<b class="nc">&nbsp;        if(output) System.out.println(&quot;Course Removed Successfully&quot;);</b>
+<b class="nc">&nbsp;        else System.out.println(&quot;Course Not Removed&quot;);</b>
+&nbsp;    }
+&nbsp;    public void add_users() throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.println(&quot;Press 1 for student, 2 for faculty, 3 for admin&quot;);</b>
+<b class="nc">&nbsp;        int role = Integer.parseInt(scanner.nextLine());</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter mail&quot;);</b>
+<b class="nc">&nbsp;        String mail = scanner.nextLine();</b>
+<b class="nc">&nbsp;        if(!Admin.check_user(mail)){</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Email Already registered&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        System.out.println(&quot;Enter Password, Default is \&quot;iitropar\&quot;&quot;);</b>
+<b class="nc">&nbsp;        String password = scanner.nextLine();</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter name(optional)&quot;);</b>
+<b class="nc">&nbsp;        String name = scanner.nextLine();</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter contact number&quot;);</b>
+<b class="nc">&nbsp;        String contact = scanner.nextLine();</b>
+<b class="nc">&nbsp;        boolean output=Admin.add_users(mail,password,name,role,contact);</b>
+<b class="nc">&nbsp;        if(output){</b>
+<b class="nc">&nbsp;            System.out.println(&quot;User Added&quot;);</b>
+&nbsp;
+&nbsp;        }
+&nbsp;        else{
+<b class="nc">&nbsp;            System.out.println(&quot;User Not Added&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    public void change_currSem(String currentSemester) throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.print(&quot;Press 1 for changing Current Semester, Press 2 for changing State Of this semester &quot;);</b>
+<b class="nc">&nbsp;        int choose = Integer.parseInt(scanner.nextLine());</b>
+&nbsp;         boolean output;
+<b class="nc">&nbsp;        if(choose==1){</b>
+<b class="nc">&nbsp;            System.out.print(&quot;Enter Name of New current Semester: &quot;);</b>
+<b class="nc">&nbsp;            String  newe = scanner.nextLine();</b>
+<b class="nc">&nbsp;             output=Admin.change_currSem(currentSemester,newe);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        }</b>
+&nbsp;        else{
+<b class="nc">&nbsp;            System.out.print(&quot;Enter Name of New state of current Semester: &quot;);</b>
+<b class="nc">&nbsp;            System.out.print(&quot;Enter Either ST(setup) or EN(enrolling) or GS(Grade Submission) : &quot;);</b>
+<b class="nc">&nbsp;            String  newe = scanner.nextLine();</b>
+<b class="nc">&nbsp;            output=Admin.change_currState(currentSemester,newe);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if(output)   System.out.println(&quot;Action Done&quot;);</b>
+<b class="nc">&nbsp;        else  System.out.println(&quot;Action  Not Done&quot;);</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void view_grades() throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.println(&quot;Enter mail of student&quot;);</b>
+<b class="nc">&nbsp;        String mail = scanner.nextLine();</b>
+<b class="nc">&nbsp;        Admin.view_grades(mail);</b>
+&nbsp;    }
+&nbsp;    public void Transcript() throws SQLException, ClassNotFoundException, IOException {
+<b class="nc">&nbsp;        System.out.println(&quot;Enter mail of student&quot;);</b>
+<b class="nc">&nbsp;        String mail = scanner.nextLine();</b>
+<b class="nc">&nbsp;        Admin.Transcript(mail);</b>
+&nbsp;    }
+&nbsp;    public void Graduation_check() throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.println(&quot;Enter mail of student&quot;);</b>
+<b class="nc">&nbsp;        String mail = scanner.nextLine();</b>
+<b class="nc">&nbsp;       if(Admin.Graduation_check(mail)) System.out.println(&quot;Eligible&quot;);</b>
+<b class="nc">&nbsp;       else System.out.println(&quot;not eligible&quot;);</b>
+&nbsp;    }
+&nbsp;    public void changeContactInfo(String mail) throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.print(&quot;Enter New Contact Number(Digits only)&quot;);</b>
+<b class="nc">&nbsp;        String NewContact = scanner.nextLine();</b>
+<b class="nc">&nbsp;        if(Admin.changeContactInfo(mail,NewContact)){ System.out.println(&quot;Contact Updated&quot;);}</b>
+<b class="nc">&nbsp;        else{System.out.println(&quot;Contact Not Updated&quot;); }</b>
+&nbsp;
+&nbsp;    }
+&nbsp;    public void changePassword(String mail) throws SQLException, ClassNotFoundException {
+<b class="nc">&nbsp;        System.out.print(&quot;Enter New Password&quot;);</b>
+<b class="nc">&nbsp;        String NewPassword = scanner.nextLine();</b>
+<b class="nc">&nbsp;        if(Admin.changePassword(mail,NewPassword)){ System.out.println(&quot;Password Updated&quot;);}</b>
+<b class="nc">&nbsp;        else{System.out.println(&quot;Password Not Updated&quot;); }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-10 10:18</div>
+</div>
+</body>
+</html>
